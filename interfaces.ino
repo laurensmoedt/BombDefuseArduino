@@ -25,31 +25,39 @@ void setup() {
   pinMode(buttonPin, INPUT_PULLUP);
   pinMode(SWITCH_PIN, INPUT_PULLUP);
 
+  
    if (digitalRead(buttonPin)) { // high, so not pressed
-   bButtonPressed1 = false;
- }
- else {
-   bButtonPressed1 = true;
- };
- // Initialize monitor
- Serial.begin(115200);
- Keyboard.set_modifier(0);
+     bButtonPressed1 = false;
+   }
+     else {
+       bButtonPressed1 = true;
+     }
+   
+   Serial.begin(115200);
+   Keyboard.set_modifier(0);
 }
 
 // the loop() methor runs over and over again,
 // as long as the board has power
 void loop() {
 
-  val = analogRead(A3);  // A0 is PIN_F0, or we could just say "14"
+    // A0 is PIN_F0, or we could just say "14"
+  val = analogRead(A3);
   Serial.print("analog 0 is: ");
   Serial.println(val);
-  delay(20);
+  delay(10);
+
+  if (val > 300 && val < 350){
+     Keyboard.press(KEY_SPACE);          // release key  
+     delay(50);                 
+     Keyboard.release(KEY_SPACE);
+  }
 
   if (digitalRead(buttonPin)){
     if (bButtonPressed1) {  // If the last state was different,
       bButtonPressed1 = false;
       digitalWrite(ledPin, LOW);    // set the LED off
-    };
+    }
   }
   else { // button is pressed  
     if (!bButtonPressed1) {  // If the last state was different,
@@ -69,8 +77,8 @@ void loop() {
       delay(1000);                  // wait for a second
       digitalWrite(ledPin3, LOW);    // set the LED off
       delay(1000);
-    }; // else, we already noticed that the button is pressed.
-  };
+    } // else, we already noticed that the button is pressed.
+  }
   delay(50);
 
   val1 = analogRead(A0);  // A0 is PIN_F0, or we could just say "14"
@@ -85,22 +93,22 @@ void loop() {
   Serial.print("analog 0 (X) is: ");
   Serial.print(val1);
 
-  if (val1 >200 && val1 <900){
+  if (val2 >200 && val2 <900){
     Keyboard.set_key1(0);          // release key
     Keyboard.send_now();
   }    
   
   else{ 
-    if (val1 <= 200) {
+    if (val2 <= 200) {
       Keyboard.set_key1(KEY_D);          // release key
       Keyboard.send_now();  
       Serial.println("Button is no longer pressed.");
     }
-    if (val1 >= 900) {
+    if (val2 >= 900) {
       Keyboard.set_key1(KEY_A);          // release key
       Keyboard.send_now();  
       Serial.println("Button is no longer pressed.");
-  }
+    }
   }
   Serial.print("\tanalog 1 (Y) is: ");
   Serial.print(val2);
